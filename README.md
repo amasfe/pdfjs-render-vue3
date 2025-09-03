@@ -132,16 +132,16 @@ app.mount('#app')
 
 ```bash
 # 安裝依賴
-npm install
+yarn install
 
 # 開發模式
-npm run dev
+yarn dev
 
 # 建置套件
-npm run build:lib
+yarn build:lib
 
 # 執行測試
-npm run test:unit
+yarn test:unit
 ```
 
 ## 依賴
