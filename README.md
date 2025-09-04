@@ -1,13 +1,14 @@
 # PDF.js Render Vue3
 
 一個基於 PDF.js 的 Vue 3 組件，用於在 Vue 3 專案中檢視和渲染 PDF 檔案。
+master更新後，會自動build:lib更新後，會自動build:lib到release分支，請使用release安裝。
 
 ## 安裝
 
 ```bash
-npm install pdfjs-render-vue3
+npm install git+https://github.com/amasfe/pdfjs-render-vue3.git#release
 # 或
-yarn add pdfjs-render-vue3
+yarn add git+https://github.com/amasfe/pdfjs-render-vue3.git#release
 ```
 
 ## 使用方法
