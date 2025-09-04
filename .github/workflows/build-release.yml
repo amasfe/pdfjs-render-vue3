@@ -30,6 +30,7 @@ jobs:
       - name: Build library
         run: yarn run build:lib
 
+
       # 5️⃣ Commit build output to release branch
       - name: Commit dist to release branch
         env:
@@ -42,12 +43,12 @@ jobs:
           # 移除舊的 build，保持乾淨
           git rm -r --ignore-unmatch dist
           # 添加最新 build
-          git add dist
+          git add -f dist
           # 如果有變更才 commit
           if ! git diff-index --quiet HEAD; then
             git commit -m "Update library build from main"
-            # force push 更新 release branch
-            git push -f origin release
+          git push -f origin release
           else
             echo "No changes in build, skipping commit."
           fi
+
