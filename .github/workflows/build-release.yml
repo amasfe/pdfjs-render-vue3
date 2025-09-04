@@ -1,0 +1,53 @@
+name: Build and update release branch
+
+on:
+  push:
+    branches:
+      - master  # 當有人 push master 分支時觸發
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout main branch
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # 需要完整歷史以便 force push
+
+      # 2️⃣ 設定 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3️⃣ 安裝依賴
+      - name: Install dependencies
+        run: yarn install
+
+      # 4️⃣ Build library
+      - name: Build library
+        run: yarn run build:lib
+
+      # 5️⃣ Commit build output to release branch
+      - name: Commit dist to release branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          # 建立或切換到 release branch
+          git checkout -B release
+          # 移除舊的 build，保持乾淨
+          git rm -r --ignore-unmatch dist
+          # 添加最新 build
+          git add dist
+          # 如果有變更才 commit
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Update library build from main"
+            # force push 更新 release branch
+            git push -f origin release
+          else
+            echo "No changes in build, skipping commit."
+          fi
