@@ -5,7 +5,6 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
 
-// https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
   const isLib = mode === 'lib'
 
@@ -13,7 +12,6 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       vue(),
       vueDevTools(),
-      // 只在套件建置模式下啟用 dts 插件
       isLib &&
         dts({
           insertTypesEntry: true,
@@ -39,11 +37,20 @@ export default defineConfig(({ command, mode }) => {
               globals: {
                 vue: 'Vue',
               },
+              // ✅ 確保 CSS 檔名固定
+              assetFileNames: (assetInfo) => {
+                if (assetInfo.name === 'style.css') {
+                  return 'pdfjs-render-vue3.css'
+                }
+                return assetInfo.name
+              },
             },
           },
-          // 確保 CSS 被提取
           cssCodeSplit: false,
+          emptyOutDir: true,
         }
-      : undefined,
+      : {
+          outDir: 'dist',
+        },
   }
 })
